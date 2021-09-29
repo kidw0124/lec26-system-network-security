@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 		usage();
 		return -1;
 	}
-	string iface = "enp0s3";
+	string iface=argv[1];
 	string attacker_mac=get_attacker_mac(iface);
 	string attacker_ip=get_attacker_IP_addr(iface);
 	cout<<get_attacker_mac(iface)<<'\n'<<get_attacker_IP_addr(iface)<<'\n';
@@ -98,7 +98,8 @@ int main(int argc, char* argv[]) {
 			printf("pcap_next_ex return %d error=%s\n", res, pcap_geterr(handle));
 			break;
 		}
-		if(pkt){
+		memcpy(&arp, pkt+sizeof(EthHdr), sizeof(ArpHdr));
+		if(pkt && arp.sip()==*new string(argv[3]) && arp.op()==ArpHdr::Reply && arp.tip()==attacker_ip && arp.tmac()==attacker_mac){
 			break;
 		}
 	}
@@ -135,7 +136,8 @@ int main(int argc, char* argv[]) {
 			printf("pcap_next_ex return %d error=%s\n", res, pcap_geterr(handle));
 			break;
 		}
-		if(pkt){
+		memcpy(&arp, pkt+sizeof(EthHdr), sizeof(ArpHdr));
+		if(pkt && arp.sip()==*new string(argv[2]) && arp.op()==ArpHdr::Reply && arp.tip()==attacker_ip && arp.tmac()==attacker_mac){
 			break;
 		}
 	}
