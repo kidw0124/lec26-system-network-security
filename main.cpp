@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
 	}
 	struct ArpHdr arp;
 	struct pcap_pkthdr *header;
-    const u_char *pkt;
+	const u_char *pkt;
 
 	while (true){
 		int res = pcap_next_ex(handle, &header, &pkt);
