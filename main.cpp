@@ -56,51 +56,51 @@ public:
 		this->is_end=false;
 		this->host_name="";
 	}
-    ~Trie(){
-    	for(int i=0;i<domain_char_size;i++){
-    		if(children[i]){
-    			delete children[i];
-    		}
-    	}
-    }
-    Trie*get_fail(){
-    	return this->fail;
-    }
-    void set_fail(Trie*fail){
-    	this->fail=fail;
-    }
-    Trie*get_children(int i){
-    	return this->children[i];
-    }
-    bool get_is_end(){
-    	return this->is_end;
-    }
-    void set_is_end(bool is_end){
-    	this->is_end=is_end;
-    }
-    string get_host_name(){
-    	return this->host_name;
-    }
-    void set_host_name(string host_name){
-    	this->host_name=host_name;
-    }
-    void insert(const string&key, int ind){
-    	int nkey=get_key(key[ind]);
-    	if(nkey==-1){
+	~Trie(){
+		for(int i=0;i<domain_char_size;i++){
+			if(children[i]){
+				delete children[i];
+			}
+		}
+	}
+	Trie*get_fail(){
+		return this->fail;
+	}
+	void set_fail(Trie*fail){
+		this->fail=fail;
+	}
+	Trie*get_children(int i){
+		return this->children[i];
+	}
+	bool get_is_end(){
+		return this->is_end;
+	}
+	void set_is_end(bool is_end){
+		this->is_end=is_end;
+	}
+	string get_host_name(){
+		return this->host_name;
+	}
+	void set_host_name(string host_name){
+		this->host_name=host_name;
+	}
+	void insert(const string&key, int ind){
+		int nkey=get_key(key[ind]);
+		if(nkey==-1){
 			fprintf(stderr, "Invalid domaind name!\n");
 			exit(1);
-    	}
-    	if(key.size()<ind){
-    		if(!children[nkey]){
-    			children[nkey]=new Trie;
-    		}
-    		children[nkey]->insert(key,ind+1);
-    	}
-    	else{
-    		is_end=true;
-    		host_name=key;
-    	}
-    }
+		}
+		if(key.size()<ind){
+			if(!children[nkey]){
+				children[nkey]=new Trie;
+			}
+			children[nkey]->insert(key,ind+1);
+		}
+		else{
+			is_end=true;
+			host_name=key;
+		}
+	}
 };
 
 Trie*root;
