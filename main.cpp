@@ -22,6 +22,7 @@ const int domain_char_size=10+26+2;
 int MAX_DOMAIN_SIZE=0;
 
 int get_key(const char&k){
+	///domain rules (except kor) in http://ktword.co.kr/test/view/view.php?m_temp1=385
 	if('0'<=k&&k<='9'){
 		return k-'0';
 	}
@@ -89,7 +90,6 @@ public:
 			fprintf(stderr, "Invalid domaind name!\n");
 			exit(1);
     	}
-    	///domain rules (except kor) in http://ktword.co.kr/test/view/view.php?m_temp1=385
     	if(key.size()<ind){
     		if(!children[nkey]){
     			children[nkey]=new Trie;
