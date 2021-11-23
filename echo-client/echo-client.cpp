@@ -52,7 +52,7 @@ void recvThread(int sd) {
 			break;
 		}
 		buf[res] = '\0';
-		cout << buf;
+		cout << "Recieved from server : " << buf;
 		cout.flush();
 	}
 	cout << "disconnected\n";
