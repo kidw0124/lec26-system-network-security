@@ -26,10 +26,11 @@ void usage() {
 	cout << "sample : echo-server 1234 -e -b\n";
 }
 
+set<int>cli_sds;
+
 struct Param {
 	bool echo{false}, broadcast{false};
 	uint16_t port{0};
-	set<int>cli_sds;
 
 	bool parse(int argc, char* argv[]) {
 		if(argc < 2){
@@ -40,12 +41,15 @@ struct Param {
 			if(now_arg[0]=='-'){
 				if(now_arg.find('e')!=string::npos){
 					echo=true;
-					if(now_arg.find('b')!=string::npos){
-						broadcast=true;
-					}
+				}
+				if(now_arg.find('b')!=string::npos){
+					broadcast=true;
 				}
 			}
 			else port = stoi(argv[i]);
+		}
+		if(broadcast&&!echo){
+			return false;
 		}
 		return port != 0;
 	}
@@ -55,7 +59,7 @@ void recvThread(int sd) {
 	cout << "connected\n";
 	static const int BUFSIZE = 65536;
 	char buf[BUFSIZE];
-	while (param.cli_sds.size()>0) {
+	while (cli_sds.size()>0) {
 		ssize_t res = recv(sd, buf, BUFSIZE - 1, 0);
 		if (res == 0 || res == -1) {
 			cerr << "recv return " << res;
@@ -67,14 +71,14 @@ void recvThread(int sd) {
 		cout.flush();
 		if (param.echo) {
 			if(param.broadcast){
-				for(auto k:param.cli_sds){
+				for(auto k:cli_sds){
 					res = send(k, buf, res, 0);
 					if(res == 0 || res == -1){
 						cerr << "send return " << res;
 						perror(" ");
 						cout << "disconnected : "<<k<<"\n";
 						close(k);
-						param.cli_sds.erase(k);
+						cli_sds.erase(k);
 					}
 				}
 			}
@@ -85,7 +89,7 @@ void recvThread(int sd) {
 					perror(" ");
 					close(sd);
 					cout << "disconnected : "<<sd<<"\n";
-					param.cli_sds.erase(sd);
+					cli_sds.erase(sd);
 					break;
 				}
 			}
@@ -146,7 +150,7 @@ int main(int argc, char* argv[]) {
 			perror("accept");
 			break;
 		}
-		else param.cli_sds.insert(cli_sd);
+		else cli_sds.insert(cli_sd);
 		thread* t = new thread(recvThread, cli_sd);
 		t->detach();
 	}
