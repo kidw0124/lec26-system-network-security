@@ -18,6 +18,7 @@ ascii readable을 제외하고는 1만큼 차이가 있음
 ![image](https://user-images.githubusercontent.com/38641848/145113194-d15088d7-1063-432b-b367-e1b9b9a611d2.png)
 
 ## 802.11 Frame Format
+### Frame Format Image
 ![image](https://user-images.githubusercontent.com/38641848/145157161-851b34e9-e209-46d3-a7a6-879cb28f102a.png)
 ### MAC header
 ```cpp
