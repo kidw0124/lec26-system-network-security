@@ -15,14 +15,14 @@ bool isprint(const string&str){
 	return true;
 }
 ostream& operator<<(ostream& os,const Mac&mac){
-	return os<<mac;
+	return os<<string(mac);
 }
 
 ostream& operator<<(ostream& os,const map<Mac,PrintData>&data){
 	os<<setfill('-')<<setw(80)<<"-"<<'\n';
 	os<<setfill(' ')<<left<<setw(20)<<"BSSID"<<setw(10)<<"BEACONS"<<setw(40)<<"ESSID"<<'\n';
 	for(auto k:data){
-		os<<setw(20)<<left<<string(k.first)<<setw(10)<<left<<k.second.beacons<<setw(40)<<left<<k.second.essid<<'\n';
+		os<<setw(20)<<left<<k.first<<setw(10)<<left<<k.second.beacons<<setw(40)<<left<<k.second.essid<<'\n';
 	}
 	os<<setfill('-')<<setw(80)<<"-"<<'\n';
 	return os;
@@ -47,7 +47,7 @@ void airodump(const u_char *pkt){
 		data[bss].addone();
 	}
 	else{
-		if(isprint(essid)){
+		if(isprint(essid)){ /// only for readable ascii
 			data[bss]={1,essid};
 		}
 		else{
